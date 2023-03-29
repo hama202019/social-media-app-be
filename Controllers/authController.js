@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 export const register = async (req, res) => {
     const {email, password, firstName, lastName} = req.body;
+    if(!email || !password || !firstName || !lastName) return res.status(400).json({error: "all fields must be filled"});
     try{
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);        
@@ -21,6 +22,6 @@ export const login = async (req, res) => {
         const correctPassword = await bcrypt.compare(password, user.password);
         correctPassword ? res.status(200).json(user) : res.status(400).json({error: "incorrect password"});
     } catch (error) {
-        
+        res.status(400).json({error: error.message});       
     }
 }
