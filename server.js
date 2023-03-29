@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import authRouter from './Routes/authRoute.js';
 import userRouter from './Routes/userRoute.js';
+import postRoute from './Routes/postRoute.js';
 
 dotenv.config();
 
@@ -18,3 +19,4 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/post", postRoute);
