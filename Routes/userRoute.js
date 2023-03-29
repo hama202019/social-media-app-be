@@ -7,6 +7,6 @@ router.route('/:id')
     .put(updateUser)
     .delete(deleteUser);
 router.put("/follow/:id", followUser);
-router.put('/unfollow:id', unFollowUser);
+router.put('/unfollow/:id', unFollowUser);
 
 export default router;
