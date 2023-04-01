@@ -5,6 +5,7 @@ const postSchema = mongoose.Schema({
     desc: String,
     likes: [],
     image: String,
+    ref: String
   }, { timestamps: true }
 );
 
