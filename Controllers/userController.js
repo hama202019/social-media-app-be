@@ -38,7 +38,7 @@ export const deleteUser = async (req, res) => {
     const id = req.params.id;
   
     const { currentUserId, currentUserAdminStatus } = req.body;
-  
+
     if(currentUserId === id || currentUserAdminStatus) {
       try {
         await UserModel.findByIdAndDelete(id);
@@ -53,9 +53,9 @@ export const deleteUser = async (req, res) => {
 
 export const followUser = async (req, res) => {
     const id = req.params.id;
-  
-    const { currentUserId } = req.body;
-  
+
+    const currentUserId = req.body._id;
+
     if (currentUserId === id) return  res.status(403).json("Action forbidden");
     
     try {
@@ -65,7 +65,8 @@ export const followUser = async (req, res) => {
       if (!followUser.followers.includes(currentUserId)) {
         await followUser.updateOne({ $push: { followers: currentUserId } });
         await followingUser.updateOne({ $push: { following: id } });
-        res.status(200).json(followingUser);
+        const updatedUser = await UserModel.findById(currentUserId);
+        res.status(200).json(updatedUser);
       } else {
         res.status(403).json("User is Already followed by you");
       }
@@ -77,7 +78,7 @@ export const followUser = async (req, res) => {
 export const unFollowUser = async (req, res) => {
     const id = req.params.id;
   
-    const { currentUserId } = req.body;
+    const currentUserId = req.body._id;
   
     if (currentUserId === id) return res.status(403).json("Action forbidden");
 
@@ -107,7 +108,6 @@ export const getAllUsers = async (req, res) => {
       return otherFields
     })
     users = users.filter(user => user._id.toString() !== id)
-    console.log(users)
     res.status(200).json(users)
   } catch (error) {
     res.status(400).json({error: error.message})
