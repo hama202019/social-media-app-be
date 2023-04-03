@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import UserModel from "../Models/userModel.js";
 import bcrypt from 'bcrypt';
 
@@ -97,12 +98,16 @@ export const unFollowUser = async (req, res) => {
 };
 
 export const getAllUsers = async (req, res) => {
+  const {id} = req.query
+  if(!id) return res.status(400).json({error: "the ID is required!"})
   try {
     let users = await UserModel.find()
     users = users.map( user => {
       const {password, ...otherFields} = user._doc
       return otherFields
     })
+    users = users.filter(user => user._id.toString() !== id)
+    console.log(users)
     res.status(200).json(users)
   } catch (error) {
     res.status(400).json({error: error.message})
