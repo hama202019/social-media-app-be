@@ -1,7 +1,8 @@
 import express from "express";
-import { deleteUser, followUser, getUser, unFollowUser, updateUser } from "../Controllers/userController.js";
+import { deleteUser, followUser, getAllUsers, getUser, unFollowUser, updateUser } from "../Controllers/userController.js";
 const router = express.Router();
 
+router.get('/', getAllUsers)
 router.route('/:id')
     .get(getUser)
     .put(updateUser)
