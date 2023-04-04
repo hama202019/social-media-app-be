@@ -4,7 +4,7 @@ import { createChat, findChat, userChats } from "../Controllers/chatController.j
 const router = express.Router()
 
 router.post('/', createChat);
-router.route('/:userId', userChats);
+router.get('/:userId', userChats);
 router.get('/find/:user1Id/:user2Id', findChat);
 
 export default router
