@@ -4,7 +4,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import authRouter from './Routes/authRoute.js';
 import userRouter from './Routes/userRoute.js';
-import postRoute from './Routes/postRoute.js';
+import postRouter from './Routes/postRoute.js';
+import chatRouter from './Routes/chatRoute.js';
 import cors from 'cors';
 
 dotenv.config();
@@ -21,4 +22,5 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
-app.use("/post", postRoute);
+app.use("/post", postRouter);
+app.use("/chat", chatRouter);
