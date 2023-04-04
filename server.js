@@ -6,6 +6,7 @@ import authRouter from './Routes/authRoute.js';
 import userRouter from './Routes/userRoute.js';
 import postRouter from './Routes/postRoute.js';
 import chatRouter from './Routes/chatRoute.js';
+import messageRouter from './Routes/messageRoute.js';
 import cors from 'cors';
 
 dotenv.config();
@@ -24,3 +25,4 @@ app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 app.use("/chat", chatRouter);
+app.use("/message", messageRouter);
