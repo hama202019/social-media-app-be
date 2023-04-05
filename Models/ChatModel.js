@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const chatSchema = mongoose.Schema({
-    members: []
+    members: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
 }, {timestamps: true})
 
 chatSchema.statics.findChatByUsers = async function(user1Id, user2Id) {
