@@ -8,20 +8,17 @@ import postRouter from './Routes/postRoute.js';
 import chatRouter from './Routes/chatRoute.js';
 import messageRouter from './Routes/messageRoute.js';
 import {createServer} from 'http'
-import { Server } from 'socket.io';
 import cors from 'cors';
+import initSocket from './socket.js';
 
 dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
-export const io = new Server(httpServer, {
-    cors: {
-        origin: '*'
-    }
-})
+
+initSocket(httpServer);
+
 app.use(bodyParser.json({limit: '30mb'}));
-app.use(bodyParser.urlencoded({limit: '30mb', extended: true}));
 app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI)
