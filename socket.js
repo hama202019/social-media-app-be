@@ -8,7 +8,12 @@ function initSocket(server) {
   });
 
   io.on('connection', socket => {
-    console.log('A user connected', socket.id);
+    socket.on('joinRoom', chatId => {
+        socket.join(chatId);
+    })
+    socket.on('sendMessage', data => {
+        socket.to(data.chatId).emit('receiveMessage', data.newMessage);
+    })
   });
 }
 
