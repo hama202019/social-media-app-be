@@ -17,17 +17,16 @@ export const userChats = async (req, res) => {
     try {
         const chats = await ChatModel.find({members: {$in: [userId]}}).populate({
             path: 'members',
-            select: '_id firstName lastName profilePicture about'
+            select: '_id firstName lastName profilePicture'
         })
         const chatsWithUsers = chats.map( chat => {
             const otherUser = chat.members.find(member => member._id.toString() !== userId);
             return {
               chatId: chat._id,
-              otherUserId: otherUser._id,
-              otherUserfirstName: otherUser.firstName,
-              otherUserlastName: otherUser.lastName,
-              otherUserAbout: otherUser.about,
-              otherUserProfilePicture: otherUser.profilePicture
+              userId: otherUser._id,
+              firstName: otherUser.firstName,
+              lastName: otherUser.lastName,
+              profilePicture: otherUser.profilePicture
             };
         });
         res.status(200).json(chatsWithUsers);
@@ -40,6 +39,10 @@ export const findChat = async (req, res) => {
     const {user1Id, user2Id} = req.params;
     try {
         const chat = await ChatModel.findOne({members: {$all: [user1Id, user2Id]}});
+        if(!chat){
+            const newChat = await ChatModel.create({members: [user1Id, user2Id]});
+            return res.status(200).json(newChat);
+        }
         res.status(200).json(chat);
     } catch (error) {
         res.status(400).json({error: error.message});
