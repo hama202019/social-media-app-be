@@ -71,7 +71,7 @@ export const followUser = async (req, res) => {
         res.status(403).json("User is Already followed by you");
       }
     } catch (error) {
-      res.status(400).json(error);
+      res.status(400).json({error: error.message});
     }
 };
 
@@ -121,5 +121,16 @@ export const deleteAll = async (req, res) => {
     res.status(200).json({message: "all users are deleted"})
   } catch (error) {
     res.status(400).json({error: error.message})
+  }
+}
+
+export const findUsers = async (req, res) => {
+  const { q } = req.query;
+
+  try {
+    const users = await UserModel.find({ name: { $regex: new RegExp(q, 'i') } }, '_id firstName lastName profilePicture');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 }
