@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import UserModel from "../Models/userModel.js";
 import bcrypt from 'bcrypt';
 
@@ -126,11 +125,14 @@ export const deleteAll = async (req, res) => {
 
 export const findUsers = async (req, res) => {
   const { q } = req.query;
-
+  
   try {
-    const users = await UserModel.find({ name: { $regex: new RegExp(q, 'i') } }, '_id firstName lastName profilePicture');
+    const users = await UserModel.find({$or: [
+      { firstName: { $regex: new RegExp(q, 'i') } },
+      { lastName: { $regex: new RegExp(q, 'i') } }
+    ]}, '_id firstName lastName profilePicture');
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 }
