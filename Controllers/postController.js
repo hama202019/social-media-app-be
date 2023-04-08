@@ -56,21 +56,23 @@ export const deletePost = async (req, res) => {
 };
 
 export const likePost = async (req, res) => {
-    const id = req.params.id;
-    const { userId } = req.body;
+  const id = req.params.id;
+  const { userId } = req.body;
   
-    try {
+  try {
       const post = await PostModel.findById(id);
       if (!post.likes.includes(userId)) {
-        await post.updateOne({ $push: { likes: userId } });
-        res.status(200).json("Post liked");
+          await post.updateOne({ $push: { likes: userId } });
       } else {
-        await post.updateOne({ $pull: { likes: userId } });
-        res.status(200).json("Post Unliked");
+          await post.updateOne({ $pull: { likes: userId } });
       }
-    } catch (error) {
-      res.status(400).json(error);
-    }
+      
+      const updatedPost = await PostModel.findOne({ _id: id });
+
+      res.status(200).json(updatedPost);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
 };
 
 // export const getTimelinePosts = async (req, res) => {
