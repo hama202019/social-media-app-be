@@ -124,13 +124,14 @@ export const deleteAll = async (req, res) => {
 }
 
 export const findUsers = async (req, res) => {
-  const { q } = req.query;
+  const { q, userId } = req.query;
   
   try {
-    const users = await UserModel.find({$or: [
+    let users = await UserModel.find({$or: [
       { firstName: { $regex: new RegExp(q, 'i') } },
       { lastName: { $regex: new RegExp(q, 'i') } }
     ]}, '_id firstName lastName profilePicture');
+    users = users.filter(user => user._id.toString() !== userId);
     res.json(users);
   } catch (error) {
     res.status(400).json({ message: error.message });
