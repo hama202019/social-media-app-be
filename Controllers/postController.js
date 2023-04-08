@@ -39,9 +39,9 @@ export const updatePost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-    const id = req.params.id;
-    const { userId } = req.body;
-  
+    const id = req.query.postId;
+    const {userId} = req.params;
+    
     try {
       const post = await PostModel.findById(id);
       if (post.userId === userId) {
@@ -51,7 +51,7 @@ export const deletePost = async (req, res) => {
         res.status(403).json("Action forbidden");
       }
     } catch (error) {
-      res.status(400).json(error);
+      res.status(400).json({error: error.message});
     }
 };
 
@@ -66,7 +66,7 @@ export const likePost = async (req, res) => {
       } else {
           await post.updateOne({ $pull: { likes: userId } });
       }
-      
+
       const updatedPost = await PostModel.findOne({ _id: id });
 
       res.status(200).json(updatedPost);

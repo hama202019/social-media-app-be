@@ -7,7 +7,7 @@ router.route('/')
 router.route('/:id')
     .get(getPost)
     .put(updatePost)
-    .delete(deletePost);
+router.delete('/:userId', deletePost);
 router.route('/like/:id')
     .put(likePost);
 router.get("/timeline/:id", getTimelinePosts);
